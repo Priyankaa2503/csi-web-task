@@ -147,6 +147,7 @@ function Table() {
                 <th className="py-2 px-4 border-b">Email</th>
                 <th className="py-2 px-4 border-b">Contact</th>
                 <th className="py-2 px-4 border-b">Department</th>
+                <th className="py-2 px-4 border-b">Job Title</th>
                 <th className="py-2 px-4 border-b">Gender</th>
                 <th className="py-2 px-4 border-b">Age</th>
                 <th className="py-2 px-4 border-b">Actions</th>
