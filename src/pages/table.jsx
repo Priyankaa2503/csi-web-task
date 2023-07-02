@@ -101,7 +101,7 @@ function Table() {
   return (
     <div className="bg-[#022532] min-h-screen">
       <div className="mx-auto p-8 md:p-32 ">
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-center">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-start md:items-center">
           <label
             htmlFor="fileInput"
             className="text-lg text-white font-semibold mb-2"
