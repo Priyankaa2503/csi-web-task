@@ -49,8 +49,8 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className="bg-[#022532] h-screen w-screen z-[10000] flex justify-center items-center overflow-hidden">
-        <div className="bg-[#ffffff] h-[80%] w-[35%] p-5 pt-7 rounded-md z-[10000]">
+      <div className="bg-[#022532] h-screen w-screen px-4 md:px-0  flex justify-center items-center overflow-hidden">
+        <div className="bg-[#ffffff] h-[80%]  w-full md:w-[40%]  rounded-md ">
           <Container component="main" maxWidth="xs">
             <Box
               sx={{
@@ -92,17 +92,7 @@ export default function SignUp() {
                         autoFocus
                       />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                      <TextField
-                        required
-                        fullWidth
-                        id="lastName"
-                        label="Last Name"
-                        name="lastName"
-                        autoComplete="family-name"
-                        className="h-[20px]"
-                      />
-                    </Grid>
+                   
                     <Grid item xs={12}>
                       <TextField
                         required
@@ -125,21 +115,17 @@ export default function SignUp() {
                       />
                     </Grid>
                   </Grid>
-                  <Button
-                    type="submit"
-                    fullWidth
-                   
-                    sx={{ mt: 3, mb: 2 }}
-                  >
-                    Sign Up
-                  </Button>
-                  <Grid container justifyContent="flex-end">
-                    <Grid item>
+                  <button
+                type="submit"
+                className="text-white w-full h-full text-base justify-center flex items-center font-poppins rounded-lg bg-[#022532] p-4 mt-4"
+              >
+                Signup
+              </button>
+                  
                       <Link href="/login" variant="body2">
-                        Already have an account? Sign in
+                       <p className="mt-6"> Already have an account? Sign in</p>
                       </Link>
-                    </Grid>
-                  </Grid>
+                  
                 </Box>
               </Box>
             </Box>

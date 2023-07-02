@@ -45,8 +45,8 @@ export default function SignInSide() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className="bg-[#022532] h-screen w-screen z-[10000] flex justify-center items-center overflow-hidden">
-        <div className="bg-[#ffffff] h-[80%] w-[40%]  rounded-md z-[10000]">
+      <div className="bg-[#022532] h-screen w-screen px-4 md:px-0  flex justify-center items-center overflow-hidden">
+        <div className="bg-[#ffffff] h-[80%]  w-full md:w-[40%]  rounded-md ">
           <Container component="main" maxWidth="xs">
             <Box
               sx={{
@@ -100,26 +100,19 @@ export default function SignInSide() {
                     control={<Checkbox value="remember" color="primary" />}
                     label="Remember me"
                   />
-                  <Button
-                    type="submit"
-                    fullWidth
+                   <button
+                type="submit"
+                className="text-white w-full h-full text-base justify-center flex items-center font-poppins rounded-lg bg-[#022532] p-4 mt-4"
+              >
+                Login
+              </button>
+                
                     
-                    sx={{ mt: 3, mb: 2 }}
-                  >
-                    Sign In
-                  </Button>
-                  <Grid container>
-                    <Grid item xs>
-                      <Link href="#" variant="body2">
-                        Forgot password?
-                      </Link>
-                    </Grid>
-                    <Grid item>
+                    
                       <Link href="/signup" variant="body2">
-                        {"Don't have an account? Sign Up"}
+                        <p className="mt-4">{"Don't have an account? Sign Up"}</p>
                       </Link>
-                    </Grid>
-                  </Grid>
+                   
                 </Box>
               </Box>
             </Box>
