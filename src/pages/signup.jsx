@@ -81,15 +81,16 @@ export default function SignUp() {
                   sx={{ mt: 3 }}
                 >
                   <Grid container spacing={1}>
-                    <Grid item xs={12} sm={6} className="">
+                    <Grid item xs={12} className="w-full" >
                       <TextField
                         autoComplete="given-name"
                         name="firstName"
                         required
-                        fullWidth
                         id="firstName"
                         label="First Name"
                         autoFocus
+                        fullWidth
+                       
                       />
                     </Grid>
                    
@@ -122,7 +123,7 @@ export default function SignUp() {
                 Signup
               </button>
                   
-                      <Link href="/login" variant="body2">
+                      <Link href="/" variant="body2">
                        <p className="mt-6"> Already have an account? Sign in</p>
                       </Link>
                   
