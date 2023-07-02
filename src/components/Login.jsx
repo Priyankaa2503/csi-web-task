@@ -16,31 +16,29 @@ import { app, database, storage } from "../firebase/config";
 import {
   getAuth,
   signInWithEmailAndPassword,
- 
 } from "firebase/auth";
 import { useRouter } from "next/router";
-
 
 const theme = createTheme();
 
 export default function SignInSide() {
- const router = useRouter();
+  const router = useRouter();
   const auth = getAuth();
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     signInWithEmailAndPassword(auth, data.get("email"), data.get("password"))
       .then((userCredential) => {
-        // // Signed in
+        // Signed in
         const user = userCredential.user;
-        // ... 
-     console.log(user);
-        router.push("/dashboard");
+        // Store user in local storage
+        localStorage.setItem("user", JSON.stringify(user));
+        router.push("/table");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        // ..
         console.log(errorMessage);
       });
   };
@@ -52,7 +50,6 @@ export default function SignInSide() {
           <Container component="main" maxWidth="xs">
             <Box
               sx={{
-                // marginTop: 8,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -103,12 +100,14 @@ export default function SignInSide() {
                     control={<Checkbox value="remember" color="primary" />}
                     label="Remember me"
                   />
-                  <button
-                type="submit"
-                className="text-white w-full h-full text-2xl md:text-base justify-center flex items-center font-poppins rounded-lg bg-[#022532] p-4 mt-4"
-              >
-                Login
-              </button>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    
+                    sx={{ mt: 3, mb: 2 }}
+                  >
+                    Sign In
+                  </Button>
                   <Grid container>
                     <Grid item xs>
                       <Link href="#" variant="body2">
@@ -116,7 +115,9 @@ export default function SignInSide() {
                       </Link>
                     </Grid>
                     <Grid item>
-                      
+                      <Link href="/signup" variant="body2">
+                        {"Don't have an account? Sign Up"}
+                      </Link>
                     </Grid>
                   </Grid>
                 </Box>
