@@ -4,12 +4,13 @@ import { useRouter } from 'next/router';
 import { getAuth } from 'firebase/auth';
 
 const initialState = {
-  Email: '',
-  Contact: '',
+ 
   PersonalDetails: {
     Name: '',
     Gender: '',
     Age: '',
+    Email: '',
+    Contact: '',
   },
   JobDescription: {
     Department: '',
@@ -22,7 +23,7 @@ function AddData() {
   const user = auth.currentUser;
 
   const [state, setState] = useState(initialState);
-  const { PersonalDetails, JobDescription, Email, Contact } = state;
+  const { PersonalDetails, JobDescription } = state;
   const db = getDatabase();
   const router = useRouter();
 
@@ -39,13 +40,13 @@ function AddData() {
     setTimeout(() => router.push('/table'), 500);
   };
 
-  const handleInput = (e) => {
-    const { name, value } = e.target;
-    setState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  // const handleInput = (e) => {
+  //   const { name, value } = e.target;
+  //   setState((prevState) => ({
+  //     ...prevState,
+  //     [name]: value,
+  //   }));
+  // };
 
   const handleNestedInput = (e) => {
     const { name, value } = e.target;
@@ -86,9 +87,9 @@ function AddData() {
             <input
               type="email"
               id="email"
-              name="Email"
-              value={Email}
-              onChange={handleInput}
+              name="PersonalDetails.Email"
+              value={PersonalDetails.Email}
+              onChange={handleNestedInput}
               className="mt-1 px-2 py-2 w-full border border-gray-900 rounded-md"
             />
           </div>
@@ -97,11 +98,11 @@ function AddData() {
               Contact
             </label>
             <input
-              type="text"
+              type="tel"
               id="contact"
-              name="Contact"
-              value={Contact}
-              onChange={handleInput}
+              name="PersonalDetails.Contact"
+              value={PersonalDetails.Contact}
+              onChange={handleNestedInput}
               className="mt-1 px-2 py-2 w-full border border-gray-900 rounded-md"
             />
           </div>

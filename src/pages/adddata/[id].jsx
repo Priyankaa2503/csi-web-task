@@ -8,11 +8,11 @@ function EditContact() {
   const auth = getAuth();
   const user = auth.currentUser;
   const [contact, setContact] = useState({
-    Email: "",
-    Contact: "",
+   
     PersonalDetails: {
       Name: "",
-     
+      Email: "",
+    Contact: "",
       Gender: "",
       Age: "",
     },
@@ -34,11 +34,11 @@ function EditContact() {
           setContact({ ...snapshot.val() });
         } else {
           setContact({
-            Email: "",
-              Contact: "",
+            
             PersonalDetails: {
               Name: "",
-              
+              Email: "",
+              Contact: "",
               Gender: "",
               Age: "",
             },
@@ -114,8 +114,8 @@ function EditContact() {
             <input
               type="email"
               id="email"
-              name="Email"
-              value={contact.Email}
+              name="PersonalDetails.Email"
+              value={contact.PersonalDetails.Email}
               onChange={handleInput}
               className="mt-1 px-2 py-2 w-full border border-gray-900 rounded-md"
             />
@@ -128,10 +128,10 @@ function EditContact() {
               Contact
             </label>
             <input
-              type="text"
+              type="tel"
               id="contact"
-              name="Contact"
-              value={contact.Contact}
+              name="PersonalDetails.Contact"
+              value={contact.PersonalDetails.Contact}
               onChange={handleInput}
               className="mt-1 px-2 py-2 w-full border border-gray-900 rounded-md"
             />

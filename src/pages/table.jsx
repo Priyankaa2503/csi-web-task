@@ -25,7 +25,7 @@ function Table() {
       const worksheet = workbook.Sheets[worksheetName];
 
       const excelData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-      console.log(excelData)
+      console.log(excelData);
 
       const db = getDatabase();
       const contactsRef = ref(db, `${user.uid}`);
@@ -33,8 +33,6 @@ function Table() {
       // Start from row 1 (index 1) to skip the header row
       for (let i = 1; i < excelData.length; i++) {
         const newRow = {
-          Contact: excelData[i][2],
-          Email: excelData[i][1],
           JobDescription: {
             Department: excelData[i][4],
             JobTitle: excelData[i][3],
@@ -43,6 +41,8 @@ function Table() {
             Name: excelData[i][0],
             Gender: excelData[i][5],
             Age: excelData[i][6],
+            Contact: excelData[i][2],
+            Email: excelData[i][1],
           },
         };
 
@@ -159,8 +159,12 @@ function Table() {
                   <td className="py-2 px-4 border-b">
                     {data[id].PersonalDetails.Name}
                   </td>
-                  <td className="py-2 px-4 border-b">{data[id].Email}</td>
-                  <td className="py-2 px-4 border-b">{data[id].Contact}</td>
+                  <td className="py-2 px-4 border-b">
+                    {data[id].PersonalDetails.Email}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    {data[id].PersonalDetails.Contact}
+                  </td>
                   <td className="py-2 px-4 border-b">
                     {data[id].JobDescription.Department}
                   </td>
