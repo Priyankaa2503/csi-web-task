@@ -1,92 +1,106 @@
-// components/AddData.js
-import React, { useState } from 'react';
-import database from '../../firebase/config';
-import { getDatabase,ref,set,push } from 'firebase/database';
-import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { getDatabase, ref, push, onValue } from 'firebase/database';
+import * as XLSX from 'xlsx';
+import { initializeApp } from 'firebase/app';
 
-const initialState = {
-  name: '',
-  email: '',
-  contact: ''
+// Initialize Firebase
+const firebaseConfig = {
+  // Your Firebase configuration
 };
 
-function AddData() {
-  const [state, setState] = useState(initialState);
-  const { name, email, contact } = state;
-  const db = getDatabase();
-const router = useRouter();
-  
-const handleSubmit = (e) => {
-    e.preventDefault();
-    const contactsRef = ref(db, 'contacts');
-    push(contactsRef, state, (err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log('Added data');
-      }
-    });
-    setTimeout(() => router.push('/table'), 500);
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+function Table() {
+  const [data, setData] = useState({});
+  const [excelData, setExcelData] = useState([]);
+
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const workbook = XLSX.read(event.target.result, { type: 'binary' });
+
+      const worksheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[worksheetName];
+
+      const excelData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+      setExcelData(excelData);
+
+      // Add the Excel data to Firebase
+      const db = getDatabase();
+      const contactsRef = ref(db, 'contacts');
+      const promises = excelData.map((row) => push(contactsRef, { name: row[0], email: row[1], contact: row[2] }));
+      Promise.all(promises)
+        .then(() => console.log('Excel data added to Firebase'))
+        .catch((error) => console.log('Error adding Excel data to Firebase:', error));
+    };
+
+    reader.readAsBinaryString(file);
   };
 
-  const handleInput = (e) => {
-    const { name, value } = e.target;
-    setState({ ...state, [name]: value });
-  };
+  useEffect(() => {
+    const contactsRef = ref(database, 'contacts');
+    const onDataChange = (snapshot) => {
+      if (snapshot.exists()) {
+        setData({ ...snapshot.val() });
+      } else {
+        setData({});
+      }
+    };
+
+    onValue(contactsRef, onDataChange);
+
+    return () => {
+      setData({});
+    };
+  }, []);
 
   return (
-    <div className="max-w-md mx-auto py-4 px-8 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-semibold mb-6">Contact Form</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="name" className="block font-medium text-gray-700">
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={name}
-            onChange={handleInput}
-            className="mt-1 px-4 py-2 w-full border-gray-300 rounded-md"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="email" className="block font-medium text-gray-700">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            onChange={handleInput}
-            className="mt-1 px-4 py-2 w-full border-gray-300 rounded-md"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="contact" className="block font-medium text-gray-700">
-            Contact
-          </label>
-          <input
-            type="tel"
-            id="contact"
-            name="contact"
-            value={contact}
-            onChange={handleInput}
-            className="mt-1 px-4 py-2 w-full border-gray-300 rounded-md"
-          />
-        </div>
-        <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-md">
-          Submit
-        </button>
-      </form>
+    <div className="max-w-2xl mt-20 mx-auto">
+      <input type="file" onChange={handleFileUpload} />
+      <h2 className="text-2xl font-semibold mb-4">Contact List</h2>
+      <table className="min-w-full bg-white border border-gray-300">
+        <thead>
+          <tr>
+            <th className="border border-gray-300 px-4 py-2">Name</th>
+            <th className="border border-gray-300 px-4 py-2">Email</th>
+            <th className="border border-gray-300 px-4 py-2">Contact</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.keys(data).map((key) => (
+            <tr key={key}>
+              <td className="border border-gray-300 px-4 py-2">{data[key].name}</td>
+              <td className="border border-gray-300 px-4 py-2">{data[key].email}</td>
+              <td className="border border-gray-300 px-4 py-2">{data[key].contact}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {excelData.length > 0 && (
+        <table className="mt-4">
+          <thead>
+            <tr>
+              <th className="border border-gray-300 px-4 py-2">Name</th>
+              <th className="border border-gray-300 px-4 py-2">Email</th>
+              <th className="border border-gray-300 px-4 py-2">Contact</th>
+            </tr>
+          </thead>
+          <tbody>
+            {excelData.map((row, index) => (
+              <tr key={index}>
+                <td className="border border-gray-300 px-4 py-2">{row[0]}</td>
+                <td className="border border-gray-300 px-4 py-2">{row[1]}</td>
+                <td className="border border-gray-300 px-4 py-2">{row[2]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
 
-export default AddData;
-
-
-
-
+export default Table;

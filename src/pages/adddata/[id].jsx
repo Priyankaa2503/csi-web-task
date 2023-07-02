@@ -45,7 +45,6 @@ function EditContact() {
         console.log(err);
       } else {
         console.log('Updated data');
-        router.push('/table')
       }
     });
     setTimeout(() => router.push('/table'), 500);
