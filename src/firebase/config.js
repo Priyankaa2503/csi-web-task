@@ -1,6 +1,7 @@
 // firebase/config.js
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
+import { getFirestore } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -15,5 +16,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+const storage=getFirestore(app)
 
-export { app, database };
+export { app, database ,storage};

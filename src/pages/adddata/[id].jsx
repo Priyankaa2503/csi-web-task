@@ -1,16 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { getDatabase, ref, set, onValue } from 'firebase/database';
-import { database } from '@/firebase/config';
-import { useRouter } from 'next/router';
-import { getAuth } from 'firebase/auth';
+import React, { useEffect, useState } from "react";
+import { getDatabase, ref, set, onValue } from "firebase/database";
+import { database } from "@/firebase/config";
+import { useRouter } from "next/router";
+import { getAuth } from "firebase/auth";
 
 function EditContact() {
   const auth = getAuth();
   const user = auth.currentUser;
   const [contact, setContact] = useState({
-    name: '',
-    email: '',
-    contact: ''
+    Email: "",
+    Contact: "",
+    PersonalDetails: {
+      Name: "",
+     
+      Gender: "",
+      Age: "",
+    },
+    JobDescription: {
+      Department: "",
+      JobTitle: "",
+    },
   });
   const router = useRouter();
   const {
@@ -25,9 +34,18 @@ function EditContact() {
           setContact({ ...snapshot.val() });
         } else {
           setContact({
-            name: '',
-            email: '',
-            contact: ''
+            Email: "",
+              Contact: "",
+            PersonalDetails: {
+              Name: "",
+              
+              Gender: "",
+              Age: "",
+            },
+            JobDescription: {
+              Department: "",
+              JobTitle: "",
+            },
           });
         }
       };
@@ -47,65 +65,145 @@ function EditContact() {
       if (err) {
         console.log(err);
       } else {
-        console.log('Updated data');
+        console.log("Updated data");
       }
     });
-    setTimeout(() => router.push('/table'), 500);
+    setTimeout(() => router.push("/table"), 500);
   };
 
   const handleInput = (e) => {
     const { name, value } = e.target;
+    const [parentKey, childKey] = name.split(".");
     setContact((prevContact) => ({
       ...prevContact,
-      [name]: value
+      [parentKey]: {
+        ...prevContact[parentKey],
+        [childKey]: value,
+      },
     }));
   };
 
   return (
-    <div className="bg-[#022532] h-screen  flex justify-center items-center">
-      <div className="p-16 w-2/6 mx-auto bg-white shadow-md rounded-lg">
-        <h2 className="text-2xl font-semibold mb-6">Edit Contact</h2>
-        <form className='w-full' onSubmit={handleSubmit}>
+    <div className="bg-[#022532] py-10 flex justify-center items-center">
+      <div className="px-16 py-6 w-2/6 mx-auto bg-white shadow-md rounded-lg">
+        <h2 className="text-2xl font-semibold mb-6">Edit Job Details</h2>
+        <form className="w-full" onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="name" className=" border-gray-900 font-medium text-gray-700">
+            <label
+              htmlFor="name"
+              className="border-gray-900 font-medium text-gray-700"
+            >
               Name
             </label>
             <input
               type="text"
               id="name"
-              name="name"
-              value={contact.name}
+              name="PersonalDetails.Name"
+              value={contact.PersonalDetails.Name}
               onChange={handleInput}
               className="mt-1 px-2 py-2 w-full border border-gray-900 rounded-md"
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="email" className="block border-gray-900 font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block border-gray-900 font-medium text-gray-700"
+            >
               Email
             </label>
             <input
               type="email"
               id="email"
-              name="email"
-              value={contact.email}
+              name="Email"
+              value={contact.Email}
               onChange={handleInput}
               className="mt-1 px-2 py-2 w-full border border-gray-900 rounded-md"
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="contact" className="block border-gray-900 font-medium text-gray-700">
+            <label
+              htmlFor="contact"
+              className="block border-gray-900 font-medium text-gray-700"
+            >
               Contact
             </label>
             <input
-              type="tel"
+              type="text"
               id="contact"
-              name="contact"
-              value={contact.contact}
+              name="Contact"
+              value={contact.Contact}
               onChange={handleInput}
               className="mt-1 px-2 py-2 w-full border border-gray-900 rounded-md"
             />
           </div>
-          <button type="submit" className="px-4 py-2 bg-gray-600 text-white rounded-md">
+          <div className="mb-4">
+            <label
+              htmlFor="gender"
+              className="block border-gray-900 font-medium text-gray-700"
+            >
+              Gender
+            </label>
+            <input
+              type="text"
+              id="gender"
+              name="PersonalDetails.Gender"
+              value={contact.PersonalDetails.Gender}
+              onChange={handleInput}
+              className="mt-1 px-2 py-2 w-full border border-gray-900 rounded-md"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="age"
+              className="block border-gray-900 font-medium text-gray-700"
+            >
+              Age
+            </label>
+            <input
+              type="text"
+              id="age"
+              name="PersonalDetails.Age"
+              value={contact.PersonalDetails.Age}
+              onChange={handleInput}
+              className="mt-1 px-2 py-2 w-full border border-gray-900 rounded-md"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="department"
+              className="block border-gray-900 font-medium text-gray-700"
+            >
+              Department
+            </label>
+            <input
+              type="text"
+              id="department"
+              name="JobDescription.Department"
+              value={contact.JobDescription.Department}
+              onChange={handleInput}
+              className="mt-1 px-2 py-2 w-full border border-gray-900 rounded-md"
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="jobTitle"
+              className="block border-gray-900 font-medium text-gray-700"
+            >
+              Job Title
+            </label>
+            <input
+              type="text"
+              id="jobTitle"
+              name="JobDescription.JobTitle"
+              value={contact.JobDescription.JobTitle}
+              onChange={handleInput}
+              className="mt-1 px-2 py-2 w-full border border-gray-900 rounded-md"
+            />
+          </div>
+          <button
+            type="submit"
+            className="mt-6 px-4 py-2 bg-gray-900 text-white rounded-md"
+          >
             Update
           </button>
         </form>
