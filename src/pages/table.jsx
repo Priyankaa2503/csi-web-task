@@ -3,8 +3,9 @@ import { getDatabase, ref, onValue, push, remove } from "firebase/database";
 import { database } from "../firebase/config";
 import Link from "next/link";
 import * as XLSX from "xlsx";
-import { getAuth } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/router";
+import { Button } from "@mui/material";
 
 function Table() {
   const [data, setData] = useState({});
@@ -65,6 +66,16 @@ function Table() {
       };
     }
   }, [user]);
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        router.push('/');
+      })
+      .catch((error) => {
+        console.log('Error logging out:', error);
+      });
+  };
+
 
   const onDelete = (id) => {
     if (window.confirm("Are you sure you want to delete?")) {
@@ -80,12 +91,36 @@ function Table() {
   };
 
   return (
-    <div className="max-w-2xl mt-20 mx-auto">
-      <input type="file" onChange={handleFileUpload} />
-      <h2 className="text-2xl font-semibold mb-4">
-        Contact List for {user?.email}
+    <div className="bg-[#022532] h-screen">
+    <div className="mx-auto p-32 ">
+        <div className="flex gap-4 items-center">
+    <label htmlFor="fileInput" className="text-lg text-white font-semibold mb-2">
+          Upload Data via Excel:
+        </label>
+        <input
+          id="fileInput"
+          type="file"
+          className="hidden"
+          onChange={handleFileUpload}
+        />
+        <Link href='/adddata/add'>
+        <Button  variant="contained" style={{ backgroundColor: 'gray' }}>
+            ADD DATA
+            </Button>
+            </Link>
+
+        <Button  onClick={() => document.getElementById("fileInput").click()} variant="contained" style={{ backgroundColor: 'gray' }}>
+        Select File
+</Button>
+        <Button onClick={handleLogout} variant="contained" style={{ backgroundColor: 'gray' }}>
+  Logout
+</Button>
+        </div>
+        
+      <h2 className="text-2xl font-semibold text-white mb-4">
+       Employee Details
       </h2>
-      <table className="min-w-full bg-white border border-gray-300">
+      <table className="min-w-full overflow-y-auto mt-6 bg-white rounded-lg shadow-lg">
         <thead>
           <tr>
             <th className="py-2 px-4 border-b">Name</th>
@@ -96,19 +131,19 @@ function Table() {
         </thead>
         <tbody>
           {Object.keys(data).map((id) => (
-            <tr key={id}>
+            <tr className="text-center" key={id}>
               <td className="py-2 px-4 border-b">{data[id].name}</td>
               <td className="py-2 px-4 border-b">{data[id].email}</td>
               <td className="py-2 px-4 border-b">{data[id].contact}</td>
               <td className="py-2 px-4 border-b">
-                <div className="flex gap-2">
+                <div className="flex gap-4 text-center justify-center">
                   <Link href={`/adddata/${id}`}>
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <button className=" text-green-500  font-medium py-2 px-4 rounded">
                       Edit
                     </button>
                   </Link>
                   <button
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    className=" text-red-700 font-bold py-2 px-4 rounded"
                     onClick={() => onDelete(id)}
                   >
                     Delete
@@ -119,6 +154,7 @@ function Table() {
           ))}
         </tbody>
       </table>
+    </div>
     </div>
   );
 }

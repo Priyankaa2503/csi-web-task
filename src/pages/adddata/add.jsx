@@ -1,53 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import { getDatabase, ref, set, onValue } from 'firebase/database';
-import { database } from '@/firebase/config';
+import React, { useState } from 'react';
+import database from '../../firebase/config';
+import { getDatabase,ref,set,push } from 'firebase/database';
 import { useRouter } from 'next/router';
 import { getAuth } from 'firebase/auth';
 
-function EditContact() {
+const initialState = {
+  name: '',
+  email: '',
+  contact: ''
+};
+
+function AddData() {
   const auth = getAuth();
   const user = auth.currentUser;
-  const [contact, setContact] = useState({
-    name: '',
-    email: '',
-    contact: ''
-  });
-  const router = useRouter();
-  const {
-    query: { id },
-  } = useRouter();
+  
+  const [state, setState] = useState(initialState);
+  const { name, email, contact } = state;
+  const db = getDatabase();
+const router = useRouter();
 
-  useEffect(() => {
-    if (id) {
-      const contactRef = ref(database, `${user.uid}/${id}`);
-      const onDataChange = (snapshot) => {
-        if (snapshot.exists()) {
-          setContact({ ...snapshot.val() });
-        } else {
-          setContact({
-            name: '',
-            email: '',
-            contact: ''
-          });
-        }
-      };
-
-      const onError = (error) => {
-        console.log(error);
-      };
-
-      onValue(contactRef, onDataChange, { onlyOnce: true, onError });
-    }
-  }, [id]);
-
-  const handleSubmit = (e) => {
+const handleSubmit = (e) => {
     e.preventDefault();
-    const contactRef = ref(database, `${user.uid}/${id}`);
-    set(contactRef, contact, (err) => {
+    const contactsRef = ref(db, `${user.uid}`);
+    push(contactsRef, state, (err) => {
       if (err) {
         console.log(err);
       } else {
-        console.log('Updated data');
+        console.log('Added data');
       }
     });
     setTimeout(() => router.push('/table'), 500);
@@ -55,16 +34,13 @@ function EditContact() {
 
   const handleInput = (e) => {
     const { name, value } = e.target;
-    setContact((prevContact) => ({
-      ...prevContact,
-      [name]: value
-    }));
+    setState({ ...state, [name]: value });
   };
 
   return (
     <div className="bg-[#022532] h-screen  flex justify-center items-center">
       <div className="p-16 w-2/6 mx-auto bg-white shadow-md rounded-lg">
-        <h2 className="text-2xl font-semibold mb-6">Edit Contact</h2>
+        <h2 className="text-2xl font-semibold mb-6">Add Details</h2>
         <form className='w-full' onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="name" className=" border-gray-900 font-medium text-gray-700">
@@ -106,7 +82,7 @@ function EditContact() {
             />
           </div>
           <button type="submit" className="px-4 py-2 bg-gray-600 text-white rounded-md">
-            Update
+            Add
           </button>
         </form>
       </div>
@@ -114,4 +90,5 @@ function EditContact() {
   );
 }
 
-export default EditContact;
+export default AddData;
+
