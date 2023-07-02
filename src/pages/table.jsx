@@ -99,9 +99,9 @@ function Table() {
   };
 
   return (
-    <div className="bg-[#022532] h-screen">
-      <div className="mx-auto p-32 ">
-        <div className="flex gap-4 items-center">
+    <div className="bg-[#022532] min-h-screen">
+      <div className="mx-auto p-8 md:p-32 ">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 items-center">
           <label
             htmlFor="fileInput"
             className="text-lg text-white font-semibold mb-2"
@@ -136,61 +136,62 @@ function Table() {
           </Button>
         </div>
 
-        <h2 className="text-2xl font-semibold text-white mb-4">
+        <h2 className="text-2xl font-semibold text-white my-4">
           Employee Details
         </h2>
-        <table className="min-w-full overflow-y-auto mt-6 bg-white rounded-lg shadow-lg">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 border-b">Name</th>
-              <th className="py-2 px-4 border-b">Email</th>
-              <th className="py-2 px-4 border-b">Contact</th>
-              <th className="py-2 px-4 border-b">Department</th>
-              <th className="py-2 px-4 border-b">Gender</th>
-              <th className="py-2 px-4 border-b">Age</th>
-              <th className="py-2 px-4 border-b">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.keys(data).map((id) => (
-              <tr className="text-center" key={id}>
-                <td className="py-2 px-4 border-b">
-                  {data[id].PersonalDetails.Name}
-                </td>
-                <td className="py-2 px-4 border-b">{data[id].Email}</td>
-                <td className="py-2 px-4 border-b">{data[id].Contact}</td>
-                <td className="py-2 px-4 border-b">
-                  {data[id].JobDescription.Department}
-                </td>
-                <td className="py-2 px-4 border-b">
-                  {data[id].JobDescription.JobTitle}
-                </td>
-                <td className="py-2 px-4 border-b">
-                  {data[id].PersonalDetails.Gender}
-                </td>
-                <td className="py-2 px-4 border-b">
-                  {data[id].PersonalDetails.Age}
-                </td>
-               
-                <td className="py-2 px-4 border-b">
-                  <div className="flex gap-4 text-center justify-center">
-                    <Link href={`/adddata/${id}`}>
-                      <button className="text-green-500 font-medium py-2 px-4 rounded">
-                        Edit
-                      </button>
-                    </Link>
-                    <button
-                      className="text-red-700 font-bold py-2 px-4 rounded"
-                      onClick={() => onDelete(id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full whitespace-nowrap bg-white rounded-lg shadow-lg">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 border-b">Name</th>
+                <th className="py-2 px-4 border-b">Email</th>
+                <th className="py-2 px-4 border-b">Contact</th>
+                <th className="py-2 px-4 border-b">Department</th>
+                <th className="py-2 px-4 border-b">Gender</th>
+                <th className="py-2 px-4 border-b">Age</th>
+                <th className="py-2 px-4 border-b">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {Object.keys(data).map((id) => (
+                <tr className="text-center" key={id}>
+                  <td className="py-2 px-4 border-b">
+                    {data[id].PersonalDetails.Name}
+                  </td>
+                  <td className="py-2 px-4 border-b">{data[id].Email}</td>
+                  <td className="py-2 px-4 border-b">{data[id].Contact}</td>
+                  <td className="py-2 px-4 border-b">
+                    {data[id].JobDescription.Department}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    {data[id].JobDescription.JobTitle}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    {data[id].PersonalDetails.Gender}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    {data[id].PersonalDetails.Age}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    <div className="flex gap-4 text-center justify-center">
+                      <Link href={`/adddata/${id}`}>
+                        <button className="text-green-500 font-medium py-2 px-4 rounded">
+                          Edit
+                        </button>
+                      </Link>
+                      <button
+                        className="text-red-700 font-bold py-2 px-4 rounded"
+                        onClick={() => onDelete(id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

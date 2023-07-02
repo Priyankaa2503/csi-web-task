@@ -84,8 +84,8 @@ function EditContact() {
   };
 
   return (
-    <div className="bg-[#022532] py-10 flex justify-center items-center">
-      <div className="px-16 py-6 w-2/6 mx-auto bg-white shadow-md rounded-lg">
+    <div className="bg-[#022532] min-h-screen py-10 flex justify-center items-center">
+      <div className="px-16 py-6 md:w-2/6 mx-auto bg-white shadow-md rounded-lg">
         <h2 className="text-2xl font-semibold mb-6">Edit Job Details</h2>
         <form className="w-full" onSubmit={handleSubmit}>
           <div className="mb-4">
