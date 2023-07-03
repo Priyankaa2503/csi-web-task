@@ -26,30 +26,34 @@ function Table() {
 
       const excelData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
       console.log(excelData);
-
+      // console.log(header)
       const db = getDatabase();
       const contactsRef = ref(db, `${user.uid}`);
+      const validHeader = ["Name","Email","Contact","JobTitle","Department","Gender","Age"]
+         if (
+        excelData[0].every((header, index) => header === validHeader[index])
+      ) {
+        for (let i = 1; i < excelData.length; i++) {
+          const newRow = {
+            JobDescription: {
+              JobTitle: excelData[i][3],
+              Department: excelData[i][4],
+            },
+            PersonalDetails: {
+              Name: excelData[i][0],
+              Gender: excelData[i][5],
+              Age: excelData[i][6],
+              Contact: excelData[i][2],
+              Email: excelData[i][1],
+            },
+          };
 
-      // Start from row 1 (index 1) to skip the header row
-      for (let i = 1; i < excelData.length; i++) {
-        const newRow = {
-          JobDescription: {
-            Department: excelData[i][4],
-            JobTitle: excelData[i][3],
-          },
-          PersonalDetails: {
-            Name: excelData[i][0],
-            Gender: excelData[i][5],
-            Age: excelData[i][6],
-            Contact: excelData[i][2],
-            Email: excelData[i][1],
-          },
-        };
-
-        await push(contactsRef, newRow);
+          await push(contactsRef, newRow);
+        }
+        console.log("Excel data added to Firebase");
+      } else {
+        alert("File format doesnt match");
       }
-
-      console.log("Excel data added to Firebase");
     };
 
     reader.readAsBinaryString(uploadedFile);
